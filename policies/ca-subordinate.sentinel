@@ -9,31 +9,27 @@ allCertAuthorityInstances = plan.find_resources("google_privateca_certificate_au
 
 messgages_ca_subordinate = {}
 for allCertAuthorityInstances as address, rc {
-    ca_type = plan.evaluate_attribute(rc,"type")
-    //print(ca_type)
-    if (types.type_of(ca_type) == "null" or types.type_of(ca_type) == "undefined") {
-        print("\"type\" not defined for resource: "+address)
-        messgages_ca_subordinate[address] = rc
-    } else {
-        if ca_type == "SUBORDINATE" {
-           ca_sub_config = plan.evaluate_attribute(rc,"subordinate_config.0.certificate_authority")
-           //print("ca_sub_config:--> "+types.type_of(ca_sub_config))
-           ca_sub_undefined = rule {types.type_of(ca_sub_config) == "undefined" or types.type_of(ca_sub_config) is "null"}
-           //print(ca_sub_undefined)
-           if ca_sub_undefined {
-               ca_sub_after_unknown = plan.evaluate_attribute(rc.change.after_unknown,"subordinate_config.0.certificate_authority")
-               //print(ca_sub_after_unknown)
-               if (types.type_of(ca_sub_after_unknown) is "undefined" or types.type_of(ca_sub_after_unknown) is "null") {
-                   print("Please define subordinate_config block for resource: "+address+ "  and define certificate_authority attribute")
-                   messgages_ca_subordinate[address] = rc
-               }
-           }
+	ca_type = plan.evaluate_attribute(rc, "type")
 
+	if (types.type_of(ca_type) == "null" or types.type_of(ca_type) == "undefined") {
+		print("\"type\" not defined for resource: " + address)
+		messgages_ca_subordinate[address] = rc
+	} else {
+		if ca_type == "SUBORDINATE" {
+			ca_sub_config = plan.evaluate_attribute(rc, "subordinate_config.0.certificate_authority")
+			ca_sub_undefined = rule { types.type_of(ca_sub_config) == "undefined" or types.type_of(ca_sub_config) is "null" }
+			if ca_sub_undefined {
+				ca_sub_after_unknown = plan.evaluate_attribute(rc.change.after_unknown, "subordinate_config.0.certificate_authority")
+				if (types.type_of(ca_sub_after_unknown) is "undefined" or types.type_of(ca_sub_after_unknown) is "null") {
+					print("Please define subordinate_config block for resource: " + address + "  and define certificate_authority attribute")
+					messgages_ca_subordinate[address] = rc
+				}
+			}
 
-        }
-    }
+		}
+	}
 
 }
 
-GCP_CAS_CASUBORDINATE = rule {length(messgages_ca_subordinate) is 0}
-main = rule {GCP_CAS_CASUBORDINATE}
+GCP_CAS_CASUBORDINATE = rule { length(messgages_ca_subordinate) is 0 }
+main = rule { GCP_CAS_CASUBORDINATE }
