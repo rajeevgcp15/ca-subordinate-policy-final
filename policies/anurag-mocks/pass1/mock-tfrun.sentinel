@@ -1,0 +1,43 @@
+id = "run-HF86oLaa1XW3bkZz"
+created_at = "2022-08-03T10:12:22.114Z"
+message = "Test run "
+commit_sha = "09b12177dc73bcf8558286b3b4a79e226269bdd5"
+speculative = true
+is_destroy = false
+refresh = true
+refresh_only = false
+replace_addrs = null
+target_addrs = null
+
+variables = {
+	"GOOGLE_OAUTH_ACCESS_TOKEN": {
+		"category":  "env",
+		"sensitive": false,
+	},
+}
+
+organization = {
+	"name": "example-org-a9c3df",
+}
+
+workspace = {
+	"auto_apply":  false,
+	"created_at":  "2022-08-03T10:09:56.282Z",
+	"description": null,
+	"id":          "ws-jAZwHxfmTK7mW58x",
+	"name":        "ca-enterprise-type-is-SUBORDINATE",
+	"tags":        [],
+	"vcs_repo": {
+		"branch":             "",
+		"display_identifier": "nemalipurianurag/ca-enterprise-type-is-SUBORDINATE",
+		"identifier":         "nemalipurianurag/ca-enterprise-type-is-SUBORDINATE",
+		"ingress_submodules": false,
+	},
+	"working_directory": "",
+}
+
+cost_estimate = {
+	"delta_monthly_cost":    "0.0",
+	"prior_monthly_cost":    "0.0",
+	"proposed_monthly_cost": "0.0",
+}

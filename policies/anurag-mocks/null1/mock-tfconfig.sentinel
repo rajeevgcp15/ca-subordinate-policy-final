@@ -1,0 +1,595 @@
+import "strings"
+import "types"
+
+_modules = {
+	"root": {
+		"data": {
+			"google_kms_crypto_key_version": {
+				"secret_version": {
+					"config":       {},
+					"provisioners": null,
+					"references": {
+						"crypto_key": [
+							"google_kms_crypto_key.secret.id",
+							"google_kms_crypto_key.secret",
+						],
+					},
+				},
+			},
+		},
+		"modules": {},
+		"outputs": {},
+		"providers": {
+			"google": {
+				"alias": {
+					"": {
+						"config": {
+							"project": "modular-scout-345114",
+							"region":  "us-central1",
+						},
+						"references": {
+							"project": [],
+							"region":  [],
+						},
+						"version": "",
+					},
+				},
+				"config": {
+					"project": "modular-scout-345114",
+					"region":  "us-central1",
+				},
+				"references": {
+					"project": [],
+					"region":  [],
+				},
+				"version": "",
+			},
+			"google-beta": {
+				"alias": {
+					"": {
+						"config": {
+							"project": "modular-scout-345114",
+							"region":  "us-central1",
+						},
+						"references": {
+							"project": [],
+							"region":  [],
+						},
+						"version": "",
+					},
+				},
+				"config": {
+					"project": "modular-scout-345114",
+					"region":  "us-central1",
+				},
+				"references": {
+					"project": [],
+					"region":  [],
+				},
+				"version": "",
+			},
+		},
+		"resources": {
+			"google_kms_crypto_key": {
+				"secret": {
+					"config": {
+						"name":    "crypto-key-example",
+						"purpose": "ASYMMETRIC_SIGN",
+						"version_template": [
+							{
+								"algorithm":        "RSA_SIGN_PSS_2048_SHA256",
+								"protection_level": "HSM",
+							},
+						],
+					},
+					"provisioners": null,
+					"references": {
+						"key_ring": [
+							"google_kms_key_ring.keyring.id",
+							"google_kms_key_ring.keyring",
+						],
+						"name":    [],
+						"purpose": [],
+						"version_template": [
+							{
+								"algorithm":        [],
+								"protection_level": [],
+							},
+						],
+					},
+				},
+			},
+			"google_kms_crypto_key_iam_member": {
+				"cas_kms_signer": {
+					"config": {
+						"role": "roles/cloudkms.signerVerifier",
+					},
+					"provisioners": null,
+					"references": {
+						"crypto_key_id": [
+							"google_kms_crypto_key.secret.id",
+							"google_kms_crypto_key.secret",
+						],
+						"member": [
+							"google_project_service_identity.privateca_sa.email",
+							"google_project_service_identity.privateca_sa",
+						],
+						"role": [],
+					},
+				},
+				"cas_kms_viewer": {
+					"config": {
+						"role": "roles/viewer",
+					},
+					"provisioners": null,
+					"references": {
+						"crypto_key_id": [
+							"google_kms_crypto_key.secret.id",
+							"google_kms_crypto_key.secret",
+						],
+						"member": [
+							"google_project_service_identity.privateca_sa.email",
+							"google_project_service_identity.privateca_sa",
+						],
+						"role": [],
+					},
+				},
+			},
+			"google_kms_key_ring": {
+				"keyring": {
+					"config": {
+						"location": "us-central1",
+						"name":     "keyring-example370",
+					},
+					"provisioners": null,
+					"references": {
+						"location": [],
+						"name":     [],
+					},
+				},
+			},
+			"google_privateca_ca_pool": {
+				"example_ca_pool_enterprise": {
+					"config": {
+						"labels": {
+							"foo": "bar",
+						},
+						"location": "us-central1",
+						"name":     "my-pool370",
+						"publishing_options": [
+							{
+								"publish_ca_cert": false,
+								"publish_crl":     true,
+							},
+						],
+						"tier": "ENTERPRISE",
+					},
+					"provisioners": null,
+					"references": {
+						"labels":   [],
+						"location": [],
+						"name":     [],
+						"publishing_options": [
+							{
+								"publish_ca_cert": [],
+								"publish_crl":     [],
+							},
+						],
+						"tier": [],
+					},
+				},
+			},
+			"google_privateca_ca_pool_iam_member": {
+				"policy": {
+					"config": {
+						"role": "roles/privateca.certificateManager",
+					},
+					"provisioners": null,
+					"references": {
+						"ca_pool": [
+							"google_privateca_ca_pool.example_ca_pool_enterprise.id",
+							"google_privateca_ca_pool.example_ca_pool_enterprise",
+						],
+						"member": [
+							"google_project_service_identity.privateca_sa.email",
+							"google_project_service_identity.privateca_sa",
+						],
+						"role": [],
+					},
+				},
+			},
+			"google_privateca_certificate_authority": {
+				"default": {
+					"config": {
+						"certificate_authority_id": "my-certificate-authority-sub",
+						"config": [
+							{
+								"subject_config": [
+									{
+										"subject": [
+											{
+												"common_name":  "my-subordinate-authority",
+												"organization": "HashiCorp",
+											},
+										],
+										"subject_alt_name": [
+											{
+												"dns_names": [
+													"hashicorp.com",
+												],
+											},
+										],
+									},
+								],
+								"x509_config": [
+									{
+										"ca_options": [
+											{
+												"is_ca":                  true,
+												"max_issuer_path_length": 0,
+											},
+										],
+										"key_usage": [
+											{
+												"base_key_usage": [
+													{
+														"cert_sign":          true,
+														"content_commitment": true,
+														"crl_sign":           true,
+														"data_encipherment":  true,
+														"decipher_only":      true,
+														"digital_signature":  true,
+														"key_agreement":      true,
+														"key_encipherment":   false,
+													},
+												],
+												"extended_key_usage": [
+													{
+														"client_auth":      false,
+														"code_signing":     true,
+														"email_protection": true,
+														"server_auth":      true,
+														"time_stamping":    true,
+													},
+												],
+											},
+										],
+									},
+								],
+							},
+						],
+						"deletion_protection": "true",
+						"key_spec": [
+							{},
+						],
+						"lifetime": "86400s",
+						"location": "us-central1",
+						"type":     "SUBORDINATE",
+					},
+					"provisioners": null,
+					"references": {
+						"certificate_authority_id": [],
+						"config": [
+							{
+								"subject_config": [
+									{
+										"subject": [
+											{
+												"common_name":  [],
+												"organization": [],
+											},
+										],
+										"subject_alt_name": [
+											{
+												"dns_names": [],
+											},
+										],
+									},
+								],
+								"x509_config": [
+									{
+										"ca_options": [
+											{
+												"is_ca":                  [],
+												"max_issuer_path_length": [],
+											},
+										],
+										"key_usage": [
+											{
+												"base_key_usage": [
+													{
+														"cert_sign":          [],
+														"content_commitment": [],
+														"crl_sign":           [],
+														"data_encipherment":  [],
+														"decipher_only":      [],
+														"digital_signature":  [],
+														"key_agreement":      [],
+														"key_encipherment":   [],
+													},
+												],
+												"extended_key_usage": [
+													{
+														"client_auth":      [],
+														"code_signing":     [],
+														"email_protection": [],
+														"server_auth":      [],
+														"time_stamping":    [],
+													},
+												],
+											},
+										],
+									},
+								],
+							},
+						],
+						"deletion_protection": [],
+						"gcs_bucket": [
+							"google_storage_bucket.cmek_bucket.name",
+							"google_storage_bucket.cmek_bucket",
+						],
+						"key_spec": [
+							{
+								"cloud_kms_key_version": [
+									"data.google_kms_crypto_key_version.secret_version.name",
+									"data.google_kms_crypto_key_version.secret_version",
+								],
+							},
+						],
+						"lifetime": [],
+						"location": [],
+						"pool": [
+							"google_privateca_ca_pool.example_ca_pool_enterprise.name",
+							"google_privateca_ca_pool.example_ca_pool_enterprise",
+						],
+						"type": [],
+					},
+				},
+				"root-ca": {
+					"config": {
+						"certificate_authority_id": "my-certificate-authority-root",
+						"config": [
+							{
+								"subject_config": [
+									{
+										"subject": [
+											{
+												"common_name":  "my-certificate-authority",
+												"organization": "HashiCorp",
+											},
+										],
+										"subject_alt_name": [
+											{
+												"dns_names": [
+													"hashicorp.com",
+												],
+											},
+										],
+									},
+								],
+								"x509_config": [
+									{
+										"ca_options": [
+											{
+												"is_ca": true,
+											},
+										],
+										"key_usage": [
+											{
+												"base_key_usage": [
+													{
+														"cert_sign": true,
+														"crl_sign":  true,
+													},
+												],
+												"extended_key_usage": [
+													{
+														"server_auth": false,
+													},
+												],
+											},
+										],
+									},
+								],
+							},
+						],
+						"deletion_protection":                    false,
+						"ignore_active_certificates_on_deletion": true,
+						"key_spec": [
+							{},
+						],
+						"location": "us-central1",
+					},
+					"provisioners": null,
+					"references": {
+						"certificate_authority_id": [],
+						"config": [
+							{
+								"subject_config": [
+									{
+										"subject": [
+											{
+												"common_name":  [],
+												"organization": [],
+											},
+										],
+										"subject_alt_name": [
+											{
+												"dns_names": [],
+											},
+										],
+									},
+								],
+								"x509_config": [
+									{
+										"ca_options": [
+											{
+												"is_ca": [],
+											},
+										],
+										"key_usage": [
+											{
+												"base_key_usage": [
+													{
+														"cert_sign": [],
+														"crl_sign":  [],
+													},
+												],
+												"extended_key_usage": [
+													{
+														"server_auth": [],
+													},
+												],
+											},
+										],
+									},
+								],
+							},
+						],
+						"deletion_protection": [],
+						"gcs_bucket": [
+							"google_storage_bucket.cmek_bucket.name",
+							"google_storage_bucket.cmek_bucket",
+						],
+						"ignore_active_certificates_on_deletion": [],
+						"key_spec": [
+							{
+								"cloud_kms_key_version": [
+									"data.google_kms_crypto_key_version.secret_version.name",
+									"data.google_kms_crypto_key_version.secret_version",
+								],
+							},
+						],
+						"location": [],
+						"pool": [
+							"google_privateca_ca_pool.example_ca_pool_enterprise.name",
+							"google_privateca_ca_pool.example_ca_pool_enterprise",
+						],
+					},
+				},
+			},
+			"google_project_service": {
+				"apis": {
+					"config": {
+						"disable_on_destroy": false,
+					},
+					"provisioners": null,
+					"references": {
+						"disable_on_destroy": [],
+						"project": [
+							"var.project_id",
+						],
+						"service": [
+							"each.key",
+						],
+					},
+				},
+			},
+			"google_project_service_identity": {
+				"privateca_sa": {
+					"config": {
+						"project": "modular-scout-345114",
+						"service": "privateca.googleapis.com",
+					},
+					"provisioners": null,
+					"references": {
+						"project": [],
+						"service": [],
+					},
+				},
+			},
+			"google_storage_bucket": {
+				"cmek_bucket": {
+					"config": {
+						"force_destroy": true,
+						"location":      "us-central1",
+						"name":          "default370",
+						"project":       "modular-scout-345114",
+					},
+					"provisioners": null,
+					"references": {
+						"force_destroy": [],
+						"location":      [],
+						"name":          [],
+						"project":       [],
+					},
+				},
+			},
+			"google_storage_bucket_iam_member": {
+				"cas_bucket_object_writer": {
+					"config": {
+						"role": "roles/storage.objectAdmin",
+					},
+					"provisioners": null,
+					"references": {
+						"bucket": [
+							"google_storage_bucket.cmek_bucket.name",
+							"google_storage_bucket.cmek_bucket",
+						],
+						"member": [
+							"google_project_service_identity.privateca_sa.email",
+							"google_project_service_identity.privateca_sa",
+						],
+						"role": [],
+					},
+				},
+				"cas_bucket_reader": {
+					"config": {
+						"role": "roles/storage.legacyBucketReader",
+					},
+					"provisioners": null,
+					"references": {
+						"bucket": [
+							"google_storage_bucket.cmek_bucket.name",
+							"google_storage_bucket.cmek_bucket",
+						],
+						"member": [
+							"google_project_service_identity.privateca_sa.email",
+							"google_project_service_identity.privateca_sa",
+						],
+						"role": [],
+					},
+				},
+			},
+		},
+		"variables": {
+			"project_id": {
+				"default":     "modular-scout-345114",
+				"description": "",
+			},
+			"region": {
+				"default":     "us-central1",
+				"description": "Region where resources will be created",
+			},
+		},
+	},
+}
+
+module_paths = [
+	[],
+]
+
+module = func(path) {
+	if types.type_of(path) is not "list" {
+		error("expected list, got", types.type_of(path))
+	}
+
+	if length(path) < 1 {
+		return _modules.root
+	}
+
+	addr = []
+	for path as p {
+		append(addr, "module")
+		append(addr, p)
+	}
+
+	return _modules[strings.join(addr, ".")]
+}
+
+data = _modules.root.data
+modules = _modules.root.modules
+providers = _modules.root.providers
+resources = _modules.root.resources
+variables = _modules.root.variables
+outputs = _modules.root.outputs

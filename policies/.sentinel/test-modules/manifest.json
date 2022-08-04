@@ -1,0 +1,28 @@
+{
+	"records": [
+		{
+			"key": "test/ca-subordinate/cas-subordinate-null-1/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/home/rajeevghosh/WELLS-PHASE3/03aug22/ca-subordinate-policy-final/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/ca-subordinate/cas-subordinate-null-2/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/home/rajeevghosh/WELLS-PHASE3/03aug22/ca-subordinate-policy-final/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/ca-subordinate/cas-subordinate-pass-1/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/home/rajeevghosh/WELLS-PHASE3/03aug22/ca-subordinate-policy-final/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		},
+		{
+			"key": "test/ca-subordinate/cas-subordinate-pass-2/tfplan-functions",
+			"source": "../../../common-functions/tfplan-functions/tfplan-functions.sentinel",
+			"sourceSum": "",
+			"dest": "/home/rajeevghosh/WELLS-PHASE3/03aug22/ca-subordinate-policy-final/common-functions/tfplan-functions/tfplan-functions.sentinel"
+		}
+	]
+}
